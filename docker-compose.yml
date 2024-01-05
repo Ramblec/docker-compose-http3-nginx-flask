@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  web:
+    image: nwtgck/nginx-http3
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      - "3031:3031"
+    volumes:
+      - ./default.conf:/usr/local/nginx/conf/nginx.conf
+      - ./data/html:/var/www/html
+      - ./ssl/server.crt:/etc/ssl/certs/server.crt
+      - ./ssl/server.key:/etc/ssl/private/server.key
+
+  app:
+    build: ./app
+    volumes:
+      - ./app:/var/www/
+    expose:
+      - "3031"
+    environment:
+      TZ: "Asia/Tokyo"
